@@ -1,45 +1,41 @@
 # YouTube to MP3/MP4 Converter
 
-🎵 **Aplikasi web sederhana untuk mengkonversi video YouTube ke format MP3 (audio) atau MP4 (video)**
+Aplikasi web sederhana untuk mengkonversi video YouTube ke format MP3 atau MP4 dengan antarmuka yang modern dan responsif.
+
+## 🌐 Live Demo
+
+**🚀 [Akses Aplikasi di Vercel](https://mp3danmp4-14b54ryl2-bai27s-projects.vercel.app)**
 
 ## ✨ Fitur
 
-- 🎯 **Konversi Mudah**: Cukup paste URL YouTube dan pilih format
-- 🎵 **MP3 Audio**: Download audio berkualitas tinggi dari video YouTube
-- 🎬 **MP4 Video**: Download video dalam format MP4
-- 🚀 **Multi-API**: Menggunakan beberapa API untuk memastikan keandalan
-- 📱 **Responsive**: Bekerja di desktop, tablet, dan mobile
-- 🎨 **UI Modern**: Interface yang bersih dan mudah digunakan
-- ⚡ **Cepat**: Proses konversi yang efisien
+- ✅ **Konversi Mudah**: Cukup paste URL YouTube dan pilih format (MP3/MP4)
+- 🔄 **Multi-API Support**: Menggunakan beberapa API untuk memastikan keberhasilan konversi
+- 📱 **Responsive UI**: Tampilan yang optimal di desktop dan mobile
+- ⚡ **Fast Processing**: Konversi cepat dengan preview informasi video
+- 🛡️ **Error Handling**: Penanganan error yang baik dengan fallback API
 
 ## 🛠️ Teknologi
 
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **API**: RapidAPI, Cobalt API, yt1s.com API
-- **Server**: Python HTTP Server (untuk development)
+- **APIs**: 
+  - RapidAPI (Primary)
+  - Cobalt API (Fallback)
+  - yt1s.com API (Final Fallback)
+- **Deployment**: Vercel
 
-## 🚀 Cara Menggunakan
+## 🚀 Deployment
 
-### 1. Clone Repository
-```bash
-git clone https://github.com/username/youtube-mp3-converter.git
-cd youtube-mp3-converter
-```
+### Vercel (Recommended)
+Aplikasi ini sudah di-deploy di Vercel dan dapat diakses langsung melalui link di atas.
 
-### 2. Jalankan Server Lokal
-```bash
-python -m http.server 8000
-```
-
-### 3. Buka di Browser
-Akses aplikasi di: `http://localhost:8000`
-
-### 4. Konversi Video
-1. Paste URL YouTube ke dalam input field
-2. Pilih format: **MP3** (audio) atau **MP4** (video)
-3. Klik tombol **"Convert Sekarang"**
-4. Tunggu proses konversi selesai
-5. Download file hasil konversi
+### Local Development
+1. Clone repository ini
+2. Buka terminal di folder project
+3. Jalankan local server:
+   ```bash
+   python -m http.server 8000
+   ```
+4. Buka browser dan akses `http://localhost:8000`
 
 ## 📋 Format URL yang Didukung
 
