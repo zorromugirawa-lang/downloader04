@@ -1,17 +1,13 @@
 // Konfigurasi API - menggunakan RapidAPI dengan key yang valid
 const API_CONFIG = {
     rapidapi: {
-        url: 'https://youtube-mp3-downloader5.p.rapidapi.com/',
+        url: 'https://youtube-mp4-mp3-downloader.p.rapidapi.com/api/v1',
         key: '336b94c1f0mshdc0e4d3812bed2dp127c33jsn4f7673bda404',
-        host: 'youtube-mp3-downloader5.p.rapidapi.com'
+        host: 'youtube-mp4-mp3-downloader.p.rapidapi.com'
     },
-    // Backup API gratis jika RapidAPI gagal
     alternatives: [
-        {
-            name: 'cobalt-api',
-            url: 'https://co.wuk.sh/api/json',
-            type: 'json'
-        }
+        'https://co.wuk.sh/api/json',
+        'https://www.yt1s.com/api/ajaxSearch/index'
     ]
 };
 
@@ -122,9 +118,9 @@ async function getVideoInfo(videoId) {
 async function convertWithAPI(videoId) {
     const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
     
-    // Coba menggunakan RapidAPI terlebih dahulu
+    // Coba RapidAPI terlebih dahulu
     try {
-        const response = await fetch(`${API_CONFIG.rapidapi.url}?youtube_url=${encodeURIComponent(youtubeUrl)}`, {
+        const response = await fetch(`${API_CONFIG.rapidapi.url}/progress?id=${videoId}`, {
             method: 'GET',
             headers: {
                 'X-RapidAPI-Key': API_CONFIG.rapidapi.key,
