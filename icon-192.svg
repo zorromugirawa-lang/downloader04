@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="playGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cc0000;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main background -->
+  <rect width="192" height="192" rx="24" fill="url(#bgGradient)"/>
+  
+  <!-- Central music symbol -->
+  <g fill="#ffffff">
+    <!-- Large music note -->
+    <rect x="70" y="40" width="8" height="80" rx="4"/>
+    <ellipse cx="58" cy="110" rx="14" ry="10"/>
+    
+    <!-- Second note -->
+    <rect x="100" y="50" width="6" height="60" rx="3"/>
+    <ellipse cx="92" cy="105" rx="10" ry="8"/>
+    
+    <!-- Musical staff -->
+    <rect x="30" y="70" width="80" height="2" opacity="0.7"/>
+    <rect x="30" y="80" width="80" height="2" opacity="0.7"/>
+    <rect x="30" y="90" width="80" height="2" opacity="0.7"/>
+    <rect x="30" y="100" width="80" height="2" opacity="0.7"/>
+    <rect x="30" y="110" width="80" height="2" opacity="0.7"/>
+  </g>
+  
+  <!-- Download arrow -->
+  <g fill="#ffffff">
+    <rect x="130" y="60" width="6" height="40" rx="3"/>
+    <polygon points="120,90 136,110 152,90"/>
+  </g>
+  
+  <!-- YouTube play button -->
+  <circle cx="60" cy="140" r="20" fill="url(#playGradient)"/>
+  <polygon points="50,130 50,150 75,140" fill="#ffffff"/>
+  
+  <!-- Format indicators -->
+  <g fill="#ffffff" font-family="Arial, sans-serif" font-weight="bold">
+    <text x="96" y="160" font-size="16" text-anchor="middle">MP3</text>
+    <text x="96" y="175" font-size="12" text-anchor="middle" opacity="0.8">MP4</text>
+  </g>
+  
+  <!-- Decorative sound waves -->
+  <g stroke="#ffffff" stroke-width="2" fill="none" opacity="0.6">
+    <path d="M 140 30 Q 150 35 140 40"/>
+    <path d="M 145 25 Q 160 35 145 45"/>
+    <path d="M 150 20 Q 170 35 150 50"/>
+  </g>
+</svg>

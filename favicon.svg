@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#667eea" stroke="#764ba2" stroke-width="2"/>
+  
+  <!-- Music note -->
+  <g fill="#ffffff">
+    <!-- Note stem -->
+    <rect x="28" y="16" width="3" height="24" rx="1.5"/>
+    
+    <!-- Note head -->
+    <ellipse cx="25" cy="38" rx="4" ry="3"/>
+    
+    <!-- Musical staff lines -->
+    <rect x="12" y="22" width="20" height="1" opacity="0.6"/>
+    <rect x="12" y="26" width="20" height="1" opacity="0.6"/>
+    <rect x="12" y="30" width="20" height="1" opacity="0.6"/>
+    <rect x="12" y="34" width="20" height="1" opacity="0.6"/>
+  </g>
+  
+  <!-- Download arrow -->
+  <g fill="#ffffff">
+    <!-- Arrow shaft -->
+    <rect x="42" y="20" width="3" height="16" rx="1.5"/>
+    
+    <!-- Arrow head -->
+    <polygon points="38,32 43.5,38 49,32"/>
+  </g>
+  
+  <!-- YouTube play button style -->
+  <g fill="#ff0000" opacity="0.8">
+    <circle cx="20" cy="48" r="6"/>
+    <polygon points="17,45 17,51 23,48" fill="#ffffff"/>
+  </g>
+  
+  <!-- MP3 text -->
+  <text x="32" y="54" font-family="Arial, sans-serif" font-size="8" font-weight="bold" text-anchor="middle" fill="#ffffff">MP3</text>
+</svg>
