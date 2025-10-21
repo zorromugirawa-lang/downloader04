@@ -178,8 +178,22 @@
             Convert Sekarang
         </button>
 
-        <div class="result" id="result">
-            <!-- Hasil akan ditampilkan di sini -->
+        <div id="result" class="result"></div>
+
+        <!-- Playlist Section -->
+        <div style="margin-top: 40px; padding-top: 30px; border-top: 2px solid #eee;">
+            <h2 style="text-align: center; color: #333; margin-bottom: 10px;">🎵 YouTube Playlist Converter</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">Download semua video dari playlist YouTube sekaligus</p>
+            
+            <div class="input-group">
+                <input type="text" id="playlistUrl" placeholder="Masukkan URL Playlist YouTube (contoh: https://www.youtube.com/playlist?list=...)" autocomplete="off">
+            </div>
+
+            <button class="convert-btn" onclick="convertPlaylist()" id="convertPlaylistBtn" style="margin-top: 20px;">
+                Ambil Playlist
+            </button>
+
+            <div id="playlistResult" class="result"></div>
         </div>
     </div>
 

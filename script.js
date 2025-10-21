@@ -5,6 +5,11 @@ const API_CONFIG = {
         key: '336b94c1f0mshdc0e4d3812bed2dp127c33jsn4f7673bda404',
         host: 'youtube-mp3-audio-video-downloader.p.rapidapi.com'
     },
+    playlist: {
+        url: 'https://youtube-media-downloader.p.rapidapi.com',
+        key: '336b94c1f0mshdc0e4d3812bed2dp127c33jsn4f7673bda404',
+        host: 'youtube-media-downloader.p.rapidapi.com'
+    },
     alternatives: [
         'https://co.wuk.sh/api/json',
         'https://www.yt1s.com/api/ajaxSearch/index'
@@ -304,6 +309,232 @@ function showError(message) {
 }
 
 // Enter key support
+document.getElementById('youtubeUrl').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        convertVideo();
+    }
+});
+
+document.getElementById('playlistUrl').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        convertPlaylist();
+    }
+});
+
+// Playlist functionality
+async function convertPlaylist() {
+    const url = document.getElementById('playlistUrl').value.trim();
+    const convertBtn = document.getElementById('convertPlaylistBtn');
+    const resultDiv = document.getElementById('playlistResult');
+
+    // Validasi input
+    if (!url) {
+        showPlaylistError('Silakan masukkan URL Playlist YouTube');
+        return;
+    }
+
+    const playlistId = extractPlaylistId(url);
+    if (!playlistId) {
+        showPlaylistError('URL Playlist YouTube tidak valid');
+        return;
+    }
+
+    // Tampilkan loading
+    convertBtn.disabled = true;
+    convertBtn.textContent = 'Mengambil Playlist...';
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `
+        <div class="loading">
+            <p>🔄 Sedang mengambil video dari playlist...</p>
+            <p>Harap tunggu beberapa saat</p>
+        </div>
+    `;
+
+    try {
+        const playlistData = await getPlaylistVideos(playlistId);
+        
+        if (playlistData && playlistData.videos && playlistData.videos.length > 0) {
+            showPlaylistVideos(playlistData);
+        } else {
+            throw new Error('Playlist tidak ditemukan atau kosong');
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        showPlaylistError('Terjadi error: ' + error.message);
+    } finally {
+        convertBtn.disabled = false;
+        convertBtn.textContent = 'Ambil Playlist';
+    }
+}
+
+// Extract playlist ID dari URL
+function extractPlaylistId(url) {
+    const patterns = [
+        /[?&]list=([^&]+)/,
+        /playlist\?list=([^&]+)/
+    ];
+
+    for (let pattern of patterns) {
+        const match = url.match(pattern);
+        if (match && match[1]) {
+            return match[1];
+        }
+    }
+    return null;
+}
+
+// Ambil video dari playlist menggunakan API
+async function getPlaylistVideos(playlistId) {
+    try {
+        const response = await fetch(`${API_CONFIG.playlist.url}/v2/playlist/videos?playlistId=${playlistId}`, {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': API_CONFIG.playlist.key,
+                'X-RapidAPI-Host': API_CONFIG.playlist.host
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            throw new Error('Gagal mengambil data playlist');
+        }
+    } catch (error) {
+        throw new Error('Error mengakses API playlist: ' + error.message);
+    }
+}
+
+// Tampilkan daftar video playlist
+function showPlaylistVideos(playlistData) {
+    const resultDiv = document.getElementById('playlistResult');
+    const videos = playlistData.videos || [];
+    
+    let videosHtml = videos.map((video, index) => `
+        <div class="playlist-video-item" style="border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 8px; background: #f9f9f9;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <img src="${video.thumbnail || ''}" alt="Thumbnail" style="width: 120px; height: 90px; object-fit: cover; border-radius: 5px;">
+                <div style="flex: 1;">
+                    <h4 style="margin: 0 0 5px 0; color: #333;">${video.title || 'Unknown Title'}</h4>
+                    <p style="margin: 0; color: #666; font-size: 14px;">Duration: ${video.duration || 'Unknown'}</p>
+                    <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">Channel: ${video.channelTitle || 'Unknown'}</p>
+                </div>
+                <button onclick="downloadVideoFromPlaylist('${video.videoId}')" 
+                        class="download-btn" 
+                        style="padding: 8px 16px; background: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Download ${currentFormat.toUpperCase()}
+                </button>
+            </div>
+        </div>
+    `).join('');
+
+    resultDiv.innerHTML = `
+        <div class="playlist-success">
+            <h3>✅ Playlist berhasil dimuat!</h3>
+            <p><strong>Total Video:</strong> ${videos.length}</p>
+            <p><strong>Playlist:</strong> ${playlistData.title || 'YouTube Playlist'}</p>
+            <div style="margin-top: 20px;">
+                <button onclick="downloadAllFromPlaylist()" 
+                        style="padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">
+                    Download Semua (${currentFormat.toUpperCase()})
+                </button>
+                <button onclick="clearPlaylistResult()" 
+                        style="padding: 10px 20px; background: #666; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Clear
+                </button>
+            </div>
+            <div class="playlist-videos" style="margin-top: 20px;">
+                ${videosHtml}
+            </div>
+        </div>
+    `;
+}
+
+// Download video individual dari playlist
+async function downloadVideoFromPlaylist(videoId) {
+    try {
+        const downloadData = await convertWithAPI(videoId);
+        
+        if (downloadData && downloadData.link) {
+            // Buka link download di tab baru
+            window.open(downloadData.link, '_blank');
+        } else {
+            alert('Gagal mengkonversi video: ' + (downloadData.msg || 'Unknown error'));
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+// Download semua video dari playlist
+async function downloadAllFromPlaylist() {
+    const videoItems = document.querySelectorAll('.playlist-video-item');
+    const totalVideos = videoItems.length;
+    
+    if (totalVideos === 0) return;
+    
+    const confirmed = confirm(`Anda akan mendownload ${totalVideos} video. Lanjutkan?`);
+    if (!confirmed) return;
+    
+    for (let i = 0; i < videoItems.length; i++) {
+        const downloadBtn = videoItems[i].querySelector('.download-btn');
+        const videoId = downloadBtn.getAttribute('onclick').match(/'([^']+)'/)[1];
+        
+        try {
+            downloadBtn.textContent = 'Downloading...';
+            downloadBtn.disabled = true;
+            
+            const downloadData = await convertWithAPI(videoId);
+            
+            if (downloadData && downloadData.link) {
+                // Delay untuk menghindari spam
+                setTimeout(() => {
+                    window.open(downloadData.link, '_blank');
+                }, i * 2000); // 2 detik delay antar download
+                
+                downloadBtn.textContent = '✅ Downloaded';
+                downloadBtn.style.background = '#4CAF50';
+            } else {
+                downloadBtn.textContent = '❌ Failed';
+                downloadBtn.style.background = '#f44336';
+            }
+        } catch (error) {
+            downloadBtn.textContent = '❌ Error';
+            downloadBtn.style.background = '#f44336';
+        }
+        
+        downloadBtn.disabled = false;
+    }
+}
+
+// Clear hasil playlist
+function clearPlaylistResult() {
+    document.getElementById('playlistResult').style.display = 'none';
+    document.getElementById('playlistUrl').value = '';
+}
+
+// Tampilkan error playlist
+function showPlaylistError(message) {
+    const resultDiv = document.getElementById('playlistResult');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `
+        <div class="error">
+            <strong>❌ Error Playlist:</strong> ${message}
+            <br><br>
+            <p style="font-size: 14px; margin-top: 10px;">
+                🔄 <strong>Kemungkinan penyebab:</strong><br>
+                • URL playlist tidak valid<br>
+                • Playlist bersifat private<br>
+                • API sedang dalam maintenance<br><br>
+                💡 <strong>Solusi:</strong><br>
+                • Pastikan URL playlist benar<br>
+                • Gunakan playlist yang public<br>
+                • Coba lagi dalam beberapa menit
+            </p>
+        </div>
+    `;
+}
 document.getElementById('youtubeUrl').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
         convertVideo();
