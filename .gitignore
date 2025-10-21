@@ -49,6 +49,42 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
+# Python virtual environment
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Downloaded files
+downloads/
+*.mp3
+*.mp4
+*.webm
+*.m4a
+
+# Test files and temporary files
+test-*.js
+simple-test.js
+api-*.txt
+api-*.json
+playlist-*.json
+test-output.txt
+
+# API keys and sensitive data
+.env
+config.json
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
 # dotenv environment variables file
 .env
 .env.test
@@ -101,3 +137,4 @@ logs
 # Temporary files
 tmp/
 temp/
+.vercel

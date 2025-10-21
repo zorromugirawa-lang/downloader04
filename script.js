@@ -1,9 +1,9 @@
 // Konfigurasi API - menggunakan RapidAPI dengan key yang valid
 const API_CONFIG = {
     rapidapi: {
-        url: 'https://youtube-mp4-mp3-downloader.p.rapidapi.com/api/v1',
+        url: 'https://youtube-mp3-audio-video-downloader.p.rapidapi.com',
         key: '336b94c1f0mshdc0e4d3812bed2dp127c33jsn4f7673bda404',
-        host: 'youtube-mp4-mp3-downloader.p.rapidapi.com'
+        host: 'youtube-mp3-audio-video-downloader.p.rapidapi.com'
     },
     alternatives: [
         'https://co.wuk.sh/api/json',
@@ -120,7 +120,11 @@ async function convertWithAPI(videoId) {
     
     // Coba RapidAPI terlebih dahulu
     try {
-        const response = await fetch(`${API_CONFIG.rapidapi.url}/progress?id=${videoId}`, {
+        const endpoint = currentFormat === 'mp3' 
+            ? `${API_CONFIG.rapidapi.url}/get_mp3_download_link/${videoId}?quality=low&wait_until_the_file_is_ready=false`
+            : `${API_CONFIG.rapidapi.url}/get_mp4_download_link/${videoId}?quality=low&wait_until_the_file_is_ready=false`;
+            
+        const response = await fetch(endpoint, {
             method: 'GET',
             headers: {
                 'X-RapidAPI-Key': API_CONFIG.rapidapi.key,
@@ -225,7 +229,21 @@ async function convertWithAPI(videoId) {
 
     } catch (error) {
         console.error('All conversion methods failed:', error);
-        throw new Error('Semua metode konversi gagal. Silakan coba lagi nanti atau gunakan URL yang berbeda.');
+        
+        // Pesan error yang lebih informatif
+        let errorMessage = 'Semua metode konversi gagal.';
+        
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+            errorMessage = 'Koneksi internet bermasalah atau API sedang down.';
+        } else if (error.message.includes('404') || error.message.includes('Not Found')) {
+            errorMessage = 'Video tidak ditemukan atau telah dihapus.';
+        } else if (error.message.includes('403') || error.message.includes('Forbidden')) {
+            errorMessage = 'Video dibatasi atau tidak dapat diakses.';
+        } else if (error.message.includes('502') || error.message.includes('Bad Gateway')) {
+            errorMessage = 'Server API sedang bermasalah. Silakan coba lagi nanti.';
+        }
+        
+        throw new Error(errorMessage);
     }
 }
 
@@ -269,7 +287,18 @@ function showError(message) {
     resultDiv.style.display = 'block';
     resultDiv.innerHTML = `
         <div class="error">
-            <strong>❌ Error:</strong> ${message}
+            <strong>❌ Service Unavailable:</strong> ${message}
+            <br><br>
+            <p style="font-size: 14px; margin-top: 10px;">
+                🔄 <strong>Kemungkinan penyebab:</strong><br>
+                • API sedang dalam maintenance<br>
+                • Koneksi internet bermasalah<br>
+                • Video mungkin dibatasi atau dihapus<br><br>
+                💡 <strong>Solusi:</strong><br>
+                • Coba lagi dalam beberapa menit<br>
+                • Periksa koneksi internet Anda<br>
+                • Gunakan URL YouTube yang berbeda
+            </p>
         </div>
     `;
 }
